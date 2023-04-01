@@ -7,16 +7,21 @@ body{
     margin: 0;
     background-color: #250606;
 }
-.title{
+.title,.level{
     color: #fff;
     text-align: center;
     font-size: 4rem;
+    margin: 0 auto;
+}
+.level{
+    font-size: 2.5rem;
+    margin: .5em 0;
 }
 .container{
     background-color: #232121;
     margin:0 auto;
-    width: 35em;
-    height: 35em;
+    width: 28em;
+    height: 28em;
     border-radius: 100%;
     position: relative;
     display: flex;
@@ -26,36 +31,41 @@ body{
     align-content: center;
     gap: 3%;
 }
-
-.color:nth-child(1){
+.button{
+    border: none;
+}
+.button:active{
+    transform: scale(1.02);
+}
+.button--color:nth-child(1){
     border-radius: 100% 5% 5% 5% ;
     background-color: #4c5;
 }
-.color:nth-child(2){
+.button--color:nth-child(2){
     border-radius: 5% 100% 5% 5% ;
     background-color: #c45;
 }
-.color:nth-child(3){
+.button--color:nth-child(3){
     border-radius: 5% 5% 5% 100%;
     background-color: #cc5;
 }
-.color:nth-child(4){
+.button--color:nth-child(4){
     border-radius: 5% 5% 100% 5%;
     background-color: #45c;
 }
-.color{
+.button--color{
     width: 45%;
     height: 45%; 
 }
-.color--select{
+.button--select{
     filter: brightness(2);
 }
 
-.button-start{
+.button--start{
     position: absolute;
     align-self: center;
-    width: 10em;
-    height: 10em;
+    width: 8em;
+    height: 8em;
     background-color: #232121;
     border-radius: 100%;
     box-shadow: 0px 0px 0 15px #000,0px 0px 0 50px #232121;
@@ -64,19 +74,19 @@ body{
     align-items: center;
 }
 
-.button-start::after,
-.button-start::before{
+.button--start::after,
+.button--start::before{
     content: '';
     position: absolute;
 }
-.button-start::after{
-    width: 40%;
-    height: 40%;
+.button--start::after{
+    width: 50%;
+    height: 50%;
     border-radius: 100%;
     border: .5em solid #fff;
     z-index: 100;
 }
-.button-start::before{
+.button--start::before{
     width: 20%;
     border: .3em solid #fff;
     box-shadow: 0 0 0 .5em #232121;
