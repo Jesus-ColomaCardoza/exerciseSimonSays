@@ -1,6 +1,9 @@
 const contanier=document.getElementById('container');
+const formPlayer=document.getElementById('form-player')
 const colors=document.querySelectorAll('.button--color');
 const level=document.getElementById('level');
+const dataPlayerScore=document.getElementById('data-player__score');
+const dataPlayerName=document.getElementById('data-player__name');
 
 
 //sounds
@@ -11,14 +14,16 @@ let wrong=new Audio('./sounds/wrong.wav');
 //variables
 let randomColors=[];
 let randomNumbers=[];
+let arrayColors=[];
 let round;
 let touch;
-let arrayColors=[];
+let score;
 
 //initiation of variables
+arrayColors=Array.from(colors);
 round=1;
 touch=0;
-arrayColors=Array.from(colors);
+score=0;
 
 const mixColors=()=>{
     for (let i = 0; i <round ; i++) {
@@ -26,7 +31,6 @@ const mixColors=()=>{
         randomNumbers.push(randomNum);
     }
 }
-
 
 const showColors=()=>{
     //First We disable the buttons to prevent click events 
@@ -58,29 +62,70 @@ contanier.addEventListener('click',(e)=>{
             console.log(e.target.id);
             right.play();
             touch++ 
+            changeScore(score+25)
             if (touch==round) {
                 //We win a round
-                reset(round+1);//we reset but increase the level
+                changeLevel(round+1);
             }
         }else{
             //The game Finish
             wrong.play();
-            reset(1);//we reset all included the level 
+            //we assign the score to the player
+            player.score=score;
+            console.log(player); 
+            changeLevel(1);
+            changeScore(0);
             console.log('You lose, Game over');
+
         }
     }else if (e.target.classList.contains('button--start')) {
-        reset(1);
+        //The game start
+        changeLevel(1);
+        changeScore(0)
     }
 })
+const player={
+    id:'',
+    name:'',
+    score:0,
+    date:null
+}
+formPlayer.addEventListener('click',(e)=>{
+    e.preventDefault();
+    if (e.target.classList.contains('form-player__accept')) {
+        dataPlayerName.textContent=`Name: ${formPlayer.name.value}`
+        //we create to the player
+        const dateStart= new Date();
+        player.name=formPlayer.name.value;
+        player.date=`${dateStart.getDate()}/${dateStart.getMonth()+1}/${dateStart.getFullYear()}`;
+        console.log(player);
+    }
+    formPlayer.reset(); 
+})
 
-const reset=(roundParameter)=>{
-    //We change the level in the html
-    level.textContent=`Level ${roundParameter}`
-    round=roundParameter; 
-    touch=0;
+const changeScore=(scoreParameter)=>{
+    score=scoreParameter;
+    dataPlayerScore.textContent=`Score: ${score}`;
+}
+
+const changeLevel=(levelParameter)=>{
+    //animation of level
+    if (levelParameter==1) {
+        level.classList.add('level--scalered')
+    }else{
+        level.classList.add('level--scalegreen')
+    }
+    setTimeout(()=>{
+        level.classList.remove('level--scalered','level--scalegreen')
+    },500)
+    //We reset the level in the html
+    level.textContent=`Level ${levelParameter}`
+    round=levelParameter; //we update o reset the level
+    touch=0;//we reset the touches
     randomNumbers=[];
     mixColors();
     showColors();
     console.log(randomNumbers);
 }
+
 

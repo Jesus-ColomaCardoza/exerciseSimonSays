@@ -9,6 +9,10 @@
 </head>
     <h1 class="title">Simon says 🗣️</h1>
     <p class="level" id="level">Level 1</p>
+    <div class="data-player">
+        <p class="data-player__name" id="data-player__name">Name: Player</p>
+        <p class="data-player__score" id="data-player__score" >Score: 0</p>
+    </div>
     <div class="container" id="container">
         <button class="button button--color" id="colorGreen"></button>
         <button class="button button--color" id="colorRed"></button>
@@ -16,6 +20,14 @@
         <button class="button button--color" id="colorBlue"></button>
         <button class="button button--start"></button>
     </div>
+    <form action="" class="form-player" id="form-player">
+        <div class="form-player__field">
+            <label for="name" class="form-player__label">Name :</label>
+            <input type="text" name="name" class="form-player__input" id="form-player__name
+            " placeholder="Enter your player name">
+        </div>
+        <input type="submit" class="form-player__accept" value="Accept">
+    </form>
 <body>
     <script src="js/index.js"></script>
 </body>
