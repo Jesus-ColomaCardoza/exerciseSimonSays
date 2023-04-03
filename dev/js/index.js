@@ -4,6 +4,9 @@ const colors=document.querySelectorAll('.button--color');
 const level=document.getElementById('level');
 const dataPlayerScore=document.getElementById('data-player__score');
 const dataPlayerName=document.getElementById('data-player__name');
+const windowModalBackground=document.getElementById('window-modal__background');
+const windowModal=document.getElementById('window-modal');
+const windowModalMessage=document.getElementById('window-modal__message');
 
 
 //sounds
@@ -34,7 +37,7 @@ const mixColors=()=>{
 
 const showColors=()=>{
     //First We disable the buttons to prevent click events 
-    arrayColors.map(color=>{color.disabled=true});
+    contanier.classList.add('container--block')
     //We show the color serie
     i=-1
     let initShowColors= setInterval(()=>{
@@ -49,15 +52,14 @@ const showColors=()=>{
         i++;
         if (i==round-1) {
             clearInterval(initShowColors)
-            //we active the buttons to can play
-            arrayColors.map(color=>{color.disabled=false});
+            contanier.classList.remove('container--block')
         }
         click.play()
     },1500)
 }
 
 contanier.addEventListener('click',(e)=>{
-    if (e.target.classList.contains('button--color')) {
+    if (e.target.classList.contains('button--color') && randomNumbers.length>0) {
         if (e.target.id==arrayColors[randomNumbers[touch]].id) {
             console.log(e.target.id);
             right.play();
@@ -66,27 +68,40 @@ contanier.addEventListener('click',(e)=>{
             if (touch==round) {
                 //We win a round
                 changeLevel(round+1);
+                mixColors();
+                showColors();
             }
         }else{
             //The game Finish
             wrong.play();
             //we assign the score to the player
             player.score=score;
+            player.level=round;
             console.log(player); 
+
+            //we must reset player, this still lack
+            dataPlayerName.textContent='Name: Player';
+
             changeLevel(1);
             changeScore(0);
-            console.log('You lose, Game over');
-
+            showWindowModal('Game over')
         }
     }else if (e.target.classList.contains('button--start')) {
-        //The game start
-        changeLevel(1);
-        changeScore(0)
+        if (dataPlayerName.textContent!='Name: Player') {
+            //The game start
+            changeLevel(1);
+            changeScore(0);
+            mixColors();
+            showColors();
+        }else{
+            showWindowModal('Enter your player name, Player is not correct name')
+        }
     }
 })
 const player={
     id:'',
     name:'',
+    level:0,
     score:0,
     date:null
 }
@@ -94,6 +109,7 @@ formPlayer.addEventListener('click',(e)=>{
     e.preventDefault();
     if (e.target.classList.contains('form-player__accept')) {
         dataPlayerName.textContent=`Name: ${formPlayer.name.value}`
+        
         //we create to the player
         const dateStart= new Date();
         player.name=formPlayer.name.value;
@@ -101,6 +117,12 @@ formPlayer.addEventListener('click',(e)=>{
         console.log(player);
     }
     formPlayer.reset(); 
+})
+
+windowModal.addEventListener('click',(e)=>{
+    if (e.target.classList.contains('window-modal__accept')||e.target.classList.contains('window-modal__close')) {
+        windowModalBackground.classList.remove('window-modal__background--scale')
+    }
 })
 
 const changeScore=(scoreParameter)=>{
@@ -123,9 +145,10 @@ const changeLevel=(levelParameter)=>{
     round=levelParameter; //we update o reset the level
     touch=0;//we reset the touches
     randomNumbers=[];
-    mixColors();
-    showColors();
     console.log(randomNumbers);
 }
 
-
+const showWindowModal=(message)=>{
+    windowModalBackground.classList.add('window-modal__background--scale')
+    windowModalMessage.textContent=message
+}
