@@ -21,12 +21,14 @@ let arrayColors=[];
 let round;
 let touch;
 let score;
+let playing;
 
 //initiation of variables
 arrayColors=Array.from(colors);
 round=1;
 touch=0;
 score=0;
+playing=false;
 
 const mixColors=()=>{
     for (let i = 0; i <round ; i++) {
@@ -77,24 +79,36 @@ contanier.addEventListener('click',(e)=>{
             //we assign the score to the player
             player.score=score;
             player.level=round;
-            console.log(player); 
+            console.log(player); //insted of to print, it get add to the localStoge 
 
-            //we must reset player, this still lack
+            //we must reset player(all his attribute but, I not yet do it), this still lacks
             dataPlayerName.textContent='Name: Player';
+            player.name='';
+            player.score=0;
+            player.level=0;  
 
             changeLevel(1);
             changeScore(0);
             showWindowModal('Game over')
         }
     }else if (e.target.classList.contains('button--start')) {
-        if (dataPlayerName.textContent!='Name: Player') {
+        if (player.name!='' && playing==false) {
             //The game start
+            playing=true;
             changeLevel(1);
             changeScore(0);
             mixColors();
             showColors();
-        }else{
+        }else if (player.name=='') {
             showWindowModal('Enter your player name, Player is not correct name')
+        }else if (playing==true) {
+            dataPlayerName.textContent='Name: Player';
+            playing=false;
+            player.name='';
+            player.score=0;
+            player.level=0; 
+            changeLevel(1);
+            changeScore(0);
         }
     }
 })
