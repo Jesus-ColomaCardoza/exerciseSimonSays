@@ -7,7 +7,8 @@ const dataPlayerName=document.getElementById('data-player__name');
 const windowModalBackground=document.getElementById('window-modal__background');
 const windowModal=document.getElementById('window-modal');
 const windowModalMessage=document.getElementById('window-modal__message');
-
+const ranking=document.getElementById('ranking');
+const rankingRecord=document.getElementById('ranking__record');
 
 //sounds
 let click=new Audio('./sounds/click.wav');
@@ -18,10 +19,12 @@ let wrong=new Audio('./sounds/wrong.wav');
 let randomColors=[];
 let randomNumbers=[];
 let arrayColors=[];
+let simonSaysPlayers=[];
 let round;
 let touch;
 let score;
 let playing;
+let dateStart;
 
 //initiation of variables
 arrayColors=Array.from(colors);
@@ -29,6 +32,15 @@ round=1;
 touch=0;
 score=0;
 playing=false;
+dateStart= new Date();
+
+let player={
+    id:'',
+    name:'',
+    level:0,
+    score:0,
+    date:''
+}
 
 const mixColors=()=>{
     for (let i = 0; i <round ; i++) {
@@ -45,11 +57,9 @@ const showColors=()=>{
     let initShowColors= setInterval(()=>{
         setTimeout(()=>{            
             arrayColors[randomNumbers[i]].classList.add('button--select');
-            // console.log(arrayColors[randomNumbers[i]],i);
         },500);
         setTimeout(()=>{
             arrayColors[randomNumbers[i]].classList.remove('button--select');
-            // console.log(arrayColors[randomNumbers[i]],i);
         },1000);
         i++;
         if (i==round-1) {
@@ -63,74 +73,58 @@ const showColors=()=>{
 contanier.addEventListener('click',(e)=>{
     if (e.target.classList.contains('button--color') && randomNumbers.length>0) {
         if (e.target.id==arrayColors[randomNumbers[touch]].id) {
-            console.log(e.target.id);
+            //console.log(e.target.id);
             right.play();
             touch++ 
             changeScore(score+25)
             if (touch==round) {
                 //We win a round
-                changeLevel(round+1);
-                mixColors();
-                showColors();
+                changeLevel(round+1);//next level
+                mixColors();//mixt of colors 
+                showColors();//show the colors
             }
         }else{
-            //The game Finish
+            //The game Finish, when you failded
             wrong.play();
-            //we assign the score to the player
-            player.score=score;
-            player.level=round;
-            console.log(player); //insted of to print, it get add to the localStoge 
 
-            //we must reset player(all his attribute but, I not yet do it), this still lacks
-            dataPlayerName.textContent='Name: Player';
-            player.name='';
-            player.score=0;
-            player.level=0;  
+            //we add to the player
+            addPlayer();
 
+            //we reset all our object player
+            resetPlayer();
             changeLevel(1);
             changeScore(0);
             showWindowModal('Game over')
+            getAllPlayers();
+            playing=false;
         }
     }else if (e.target.classList.contains('button--start')) {
         if (player.name!='' && playing==false) {
-            //The game start
-            playing=true;
+            //The game start for first time
             changeLevel(1);
             changeScore(0);
             mixColors();
             showColors();
-        }else if (player.name=='') {
+            playing=true;
+        }else if (player.name=='') { //First the player must to be sign up 
             showWindowModal('Enter your player name, Player is not correct name')
-        }else if (playing==true) {
-            dataPlayerName.textContent='Name: Player';
-            playing=false;
-            player.name='';
-            player.score=0;
-            player.level=0; 
+        }else if (playing==true) { //allow reset the game although game has started
+            //we reset all our object player
+            resetPlayer();
             changeLevel(1);
             changeScore(0);
+            getAllPlayers()
+            playing=false;
         }
     }
 })
-const player={
-    id:'',
-    name:'',
-    level:0,
-    score:0,
-    date:null
-}
 formPlayer.addEventListener('click',(e)=>{
     e.preventDefault();
     if (e.target.classList.contains('form-player__accept')) {
         dataPlayerName.textContent=`Name: ${formPlayer.name.value}`
-        
-        //we create to the player
-        const dateStart= new Date();
         player.name=formPlayer.name.value;
-        player.date=`${dateStart.getDate()}/${dateStart.getMonth()+1}/${dateStart.getFullYear()}`;
-        console.log(player);
+        formPlayer.reset(); 
     }
-    formPlayer.reset(); 
 })
 
 windowModal.addEventListener('click',(e)=>{
@@ -139,11 +133,50 @@ windowModal.addEventListener('click',(e)=>{
     }
 })
 
+ranking.addEventListener('click',(e)=>{
+    if (e.target.classList.contains('button--showranking')) {
+        rankingRecord.classList.add('ranking__record--scale')
+    }else if (e.target.classList.contains('button--removeranking'))  {
+        localStorage.clear();
+        removeAllPlayers();
+    }else if (e.target.classList.contains('ranking__record'))  {
+        rankingRecord.classList.remove('ranking__record--scale')
+    }
+})
+
+const addPlayer=()=>{
+    if (localStorage.length>0) {//when the players array already exits
+        simonSaysPlayers=JSON.parse(localStorage.getItem('simonSaysPlayers'));//we assign the array from localtorage to our current array
+        player.id=simonSaysPlayers.length;
+    }else{
+        player.id=0;
+    }
+    player.level=round;
+    player.score=score;
+    player.date=`${dateStart.getDate()}/${dateStart.getMonth()+1}/${dateStart.getFullYear()}`;
+    //console.log(player);
+    const playerAdded={
+        id:player.id,
+        name:player.name,
+        level:player.level,
+        score:player.score,
+        date:player.date
+    }
+    simonSaysPlayers.push(playerAdded);//we add the player al array simonSaysPlayers          
+    localStorage.setItem('simonSaysPlayers', JSON.stringify(simonSaysPlayers));//we replace the array simonSaysPlayers of localstorage four our current array simonSaysPlayers.
+    // console.log(simonSaysPlayers);
+}
+const resetPlayer=()=>{
+    dataPlayerName.textContent='Name: Player';
+    player.name='';
+    player.score=0;
+    player.level=0;
+    player.date=''; 
+}
 const changeScore=(scoreParameter)=>{
     score=scoreParameter;
     dataPlayerScore.textContent=`Score: ${score}`;
 }
-
 const changeLevel=(levelParameter)=>{
     //animation of level
     if (levelParameter==1) {
@@ -161,8 +194,43 @@ const changeLevel=(levelParameter)=>{
     randomNumbers=[];
     console.log(randomNumbers);
 }
-
 const showWindowModal=(message)=>{
     windowModalBackground.classList.add('window-modal__background--scale')
     windowModalMessage.textContent=message
 }
+const removeAllPlayers=()=>{
+    //code that lack
+}
+const getAllPlayers=()=>{
+    const fragmet=document.createDocumentFragment();
+    let pos=1
+    if (localStorage.length>0) {
+        simonSaysPlayers=JSON.parse(localStorage.getItem('simonSaysPlayers'));//get the array from localstorage
+        simonSaysPlayers.sort((a,b)=> b.score-a.score)//sort by score the ranking
+        simonSaysPlayers.forEach(player => {//show the players
+            const position=document.createElement('DIV');
+            const name=document.createElement('DIV');
+            const level=document.createElement('DIV');
+            const score=document.createElement('DIV');
+            const date=document.createElement('DIV');
+            position.classList.add('ranking__row')
+            name.classList.add('ranking__row')
+            level.classList.add('ranking__row')
+            score.classList.add('ranking__row')
+            date.classList.add('ranking__row')
+            position.textContent=pos;
+            name.textContent=player.name;
+            level.textContent=player.level;
+            score.textContent=player.score;
+            date.textContent=player.date;
+            fragmet.appendChild(position);
+            fragmet.appendChild(name);
+            fragmet.appendChild(level);
+            fragmet.appendChild(score);
+            fragmet.appendChild(date);
+            pos++;
+        });
+        rankingRecord.appendChild(fragmet);
+    }
+}
+getAllPlayers()

@@ -12,20 +12,20 @@
     <div class="window-modal__background" id="window-modal__background">
         <div class="window-modal" id="window-modal">
             <p class="window-modal__message" id="window-modal__message">Test Message</p>
-            <button class="button window-modal__accept">Accept</button>
-            <button class="button window-modal__close">X</button>
+            <button type="button" class="button window-modal__accept">Accept</button>
+            <button type="button" class="button window-modal__close">X</button>
         </div>
     </div>
-    <div class="data-player">
+    <section class="data-player">
         <p class="data-player__name" id="data-player__name">Name: Player</p>
         <p class="data-player__score" id="data-player__score" >Score: 0</p>
-    </div>
+    </section>
     <div class="container" id="container">
-        <button class="button button--color" id="colorGreen"></button>
-        <button class="button button--color" id="colorRed"></button>
-        <button class="button button--color" id="colorOrange"></button>
-        <button class="button button--color" id="colorBlue"></button>
-        <button class="button button--start"></button>
+        <button type="button" class="button button--color" id="colorGreen"></button>
+        <button type="button" class="button button--color" id="colorRed"></button>
+        <button type="button" class="button button--color" id="colorOrange"></button>
+        <button type="button" class="button button--color" id="colorBlue"></button>
+        <button type="button" class="button button--start"></button>
     </div>
     <form action="" class="form-player" id="form-player">
         <div class="form-player__field">
@@ -35,6 +35,20 @@
         </div>
         <input type="submit" class="button form-player__accept" value="Accept">
     </form>
+    <section class="ranking" id="ranking">
+        <h2 class="ranking__title">Ranking players</h2>
+        <div class="ranking__options">
+            <button class="button button--showranking">See Ranking</button>
+            <button class="button button--removeranking">Remove Ranking</button>
+        </div>
+        <div class="ranking__record" id="ranking__record">
+            <div class="ranking__tablehead">Position</div>
+            <div class="ranking__tablehead">Name</div>
+            <div class="ranking__tablehead">Level</div>
+            <div class="ranking__tablehead">Score</div>
+            <div class="ranking__tablehead">Date</div>
+        </div>
+    </section>
 <body>
     <script src="js/index.js"></script>
 </body>
