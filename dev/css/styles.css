@@ -17,11 +17,13 @@ body{
 .title,.level{
     color: #fff;
     text-align: center;
-    font-size: 3rem;
     margin: 0 auto;
 }
-.level{
+.title{
     font-size: 2.5rem;
+}
+.level{
+    font-size: 2.3rem;
     margin: .5em 0;
     transition: transform .5s ,background-color .5s;
 }
@@ -197,16 +199,19 @@ body{
     color:#fff;
     margin: 0 auto;
 }
-.ranking__title,.ranking__tablehead,.ranking__row{
+.ranking__tablehead,.ranking__row{
     text-align: center;
     line-height: 3em;
 }
 .ranking__title{
-    margin: .4em;
+    font-size: 1rem;
+    margin: 0em;
+    text-align: center;
+    margin-bottom: .5em;
 }
 .ranking__options{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     padding-bottom: .5em;
 }
 .ranking__record{
@@ -218,8 +223,9 @@ body{
     top: 0;
     left: 0;
     width: 100%;
-    height: 180vh;
+    height: 100vh;
     transform: scale(0);
+    transition: transform .5s;
     background-color: #00000099;
     z-index: 300;
 }
@@ -259,5 +265,37 @@ body{
         box-shadow: 0 0 0 .3em #232121;
         margin-bottom: 2em;
     }
+    .ranking__title{
+        font-size: 2rem;
+    }
+    .formplayer-ranking{
+        padding: .5em 0;
+    }
 
+}
+@media screen and (min-width:768px) {
+    .ranking__record{
+        padding: 4em 6em;
+    }
+    .formplayer-ranking{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .form-player,.ranking{
+        width: 40%;
+    }
+}
+@media screen and (min-width:960px) {
+    .form-player,.ranking{
+        width: 35%;
+    }
+}
+@media screen and (min-width:1024px) {
+    .ranking__record{
+        padding: 4em 20em;
+    }
+    .form-player,.ranking{
+        width: 30%;
+    }
 }

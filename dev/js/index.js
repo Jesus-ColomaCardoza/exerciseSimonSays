@@ -95,7 +95,7 @@ contanier.addEventListener('click',(e)=>{
             changeLevel(1);
             changeScore(0);
             showWindowModal('Game over')
-            getAllPlayers();
+            printAllPlayers();
             playing=false;
         }
     }else if (e.target.classList.contains('button--start')) {
@@ -113,7 +113,7 @@ contanier.addEventListener('click',(e)=>{
             resetPlayer();
             changeLevel(1);
             changeScore(0);
-            getAllPlayers()
+            printAllPlayers()
             playing=false;
         }
     }
@@ -135,6 +135,7 @@ windowModal.addEventListener('click',(e)=>{
 
 ranking.addEventListener('click',(e)=>{
     if (e.target.classList.contains('button--showranking')) {
+        printAllPlayers();
         rankingRecord.classList.add('ranking__record--scale')
     }else if (e.target.classList.contains('button--removeranking'))  {
         localStorage.clear();
@@ -144,7 +145,7 @@ ranking.addEventListener('click',(e)=>{
     }
 })
 
-const addPlayer=()=>{
+const addPlayer=()=>{//add a player to the localstorage
     if (localStorage.length>0) {//when the players array already exits
         simonSaysPlayers=JSON.parse(localStorage.getItem('simonSaysPlayers'));//we assign the array from localtorage to our current array
         player.id=simonSaysPlayers.length;
@@ -198,10 +199,17 @@ const showWindowModal=(message)=>{
     windowModalBackground.classList.add('window-modal__background--scale')
     windowModalMessage.textContent=message
 }
-const removeAllPlayers=()=>{
-    //code that lack
+const removeAllPlayers=()=>{//remove all the players on the HTML
+    let childrenArray=Array.from(rankingRecord.children);
+    console.log(childrenArray);
+    for (let i = 5; i < childrenArray.length; i++) {
+        rankingRecord.removeChild(childrenArray[i])
+    }
+    childrenArray=[];
+    simonSaysPlayers=[];
 }
-const getAllPlayers=()=>{
+const printAllPlayers=()=>{//print all the players on the HTML
+    removeAllPlayers();
     const fragmet=document.createDocumentFragment();
     let pos=1
     if (localStorage.length>0) {
@@ -233,4 +241,3 @@ const getAllPlayers=()=>{
         rankingRecord.appendChild(fragmet);
     }
 }
-getAllPlayers()
